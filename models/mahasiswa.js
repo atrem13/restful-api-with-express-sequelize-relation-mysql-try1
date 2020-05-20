@@ -1,9 +1,39 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const mahasiswa = sequelize.define('mahasiswa', {
-    prodi_id: DataTypes.INTEGER,
-    nama: DataTypes.STRING,
-    angkatan: DataTypes.INTEGER
+    prodi_id: {
+      allowNull:false,
+      type:DataTypes.INTEGER,
+      validate:{
+        notNull:{
+          msg:'prodi_id cant be null'
+        }
+      }
+    },
+    nama: {
+      allowNull:false,
+      type:DataTypes.STRING,
+      validate:{
+        notEmpty:{
+          msg:'name cant be empty string'
+        },
+        notNull:{
+          msg:'name cant be null'
+        }
+      }
+    },
+    angkatan: {
+      allowNull:false,
+      type:DataTypes.INTEGER,
+      validate:{
+        notEmpty:{
+          msg:'name cant be empty string'
+        },
+        notNull:{
+          msg:'name cant be null'
+        }
+      }
+    }
   }, {
     tableName: 'mahasiswas'
   });

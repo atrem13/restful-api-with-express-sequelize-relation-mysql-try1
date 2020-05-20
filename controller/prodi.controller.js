@@ -7,64 +7,59 @@ const Op = Sequelize.Op;
 
 let self = {};
 
+const r_success = require('./function/return_success.function');
+const r_error = require('./function/return_error.function');
+const {e_get_id, e_get_all, e_search} = require('./variable/actiom.variable'); 
+
 // get all data
-self.getAll = async (req, res) => {
-  try{
-    let data = await prodi.findAll({});
-    return res.json({
-      status:'ok',
-      data:data
+self.getAll =(req, res) => {
+    let data = prodi.findAll({})
+    .then((data) => {
+      if(data){
+        r_success(res, data);
+      }else{
+        r_error(res, e_get_all);
+      }
+    }).catch((err) => {
+      r_error(res, err);
     });
-  }catch(err){
-    return res.status(500).json({
-      status:'error',
-      data:err
-    });
-  }
 }
 
 // get all data with his relation
-self.getWithMahasiswa = async (req, res) => {
-  try{
-    let data = await prodi.findAll({
+self.getWithMahasiswa = (req, res) => {
+    prodi.findAll({
       include:['mahasiswas']
+    }).then((data) => {
+      if(data){
+        r_success(res, data);
+      }else{
+        r_error(res, e_get_all);
+      }
+    }).catch((err) => {
+      r_error(res, err);
     });
-    return res.json({
-      status:'ok',
-      data:data
-    });
-  }catch(err){
-    return res.status(500).json({
-      status:'error',
-      data:err
-    });
-  }
 }
 
 // get data base on id
-self.get = async (req, res) => {
-  try{
+self.get = (req, res) => {
     let id =  req.params.prodiId;
-    let data = await prodi.findByPk(id, {
+    prodi.findByPk(id, {
       include:['mahasiswas']
+    }).then((data) => {
+      if(data){
+        r_success(res, data);
+      }else{
+        r_error(res, e_get_id);
+      }
+    }).catch((err) => {
+      r_error(err);
     });
-    return res.json({
-      status:'ok',
-      data:data
-    });
-  }catch(err){
-    return res.status(500).json({
-      status:'error',
-      data:err
-    });
-  }
 }
 
 // search data base on name or mahasiswa name
-self.seacrh = async (req, res) => {
-  try{
+self.seacrh = (req, res) => {
     let text = req.query.text;
-    let data = await prodi.findAll({
+    prodi.findAll({
       include:['mahasiswas'],
       where:{
         [Op.or]:{
@@ -76,75 +71,64 @@ self.seacrh = async (req, res) => {
           }
         }
       }
+    }).then((data) => {
+      if(data){
+        r_success(res, data);
+      }else{
+        r_error(res, e_search);
+      }
+    }).catch((err) => {
+      r_error(res, err);
     });
-    return res.json({
-      status:'ok',
-      data:data
-    });
-  }catch(err){
-    return res.status(500).json({
-      status:'error',
-      data:err
-    });
-  }
 }
 
 // create new data
-self.save = async (req, res) => {
-  try{
-    let data = await prodi.create(req.body);
-    return res.json({
-      status:'ok',
-      data:data
+self.save = (req, res) => {
+    prodi.create(req.body)
+    .then((data) => {
+      if(data){
+        r_success(res, data); 
+      }
+    }).catch((err) => {
+      r_error(res, err);
     });
-  }catch(err){
-    res.status(500).json({
-      status:'error',
-      data:err
-    });
-  }
+    
 }
 
 // update data base on id
-self.update = async (req, res) => {
-  try{
+self.update = (req, res) => {
     let id = req.params.prodiId;
     let data = await prodi.update(req.body, {
       where:{
         id:id
       }
+    }).then((data) => {
+      if(data){
+        r_success(res, data);
+      }else{
+        r_error(res, e_get_id);
+      }
+    }).catch((err) => {
+      r_error(res, err);
     });
-    return res.json({
-      status:'ok',
-      data:data
-    });
-  }catch(err){
-    return res.status(500).json({
-      status:'error',
-      data:err
-    });
-  }
 }
 
 // delete data base on id
-self.delete = async(req, res)=>{
-  try{
+self.delete = (req, res)=>{
     let id = req.params.prodiId;
     let data = await prodi.destroy({
       where:{
         id:id
       }
+    }).then((data) => {
+      if(data){
+        r_success(res, data);
+      }else{
+        r_error(res, e_get_id);
+      }
+    }).catch((err) => {
+      r_error(res, err);
     });
-    return res.json({
-      status:'ok',
-      data:data
-    });
-  }catch(err){
-    return res.status.json({
-      status:'error',
-      data:err
-    });
-  }
 }
 
 // export all function

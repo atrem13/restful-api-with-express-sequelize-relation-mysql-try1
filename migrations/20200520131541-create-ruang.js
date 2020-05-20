@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('prodis', {
+    return queryInterface.createTable('ruangs', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,9 +12,17 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      akreditas: {
+      keterangan: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
+      },
+      kapasitas: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      status:{
+        defaultValue: 0,
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -27,6 +35,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('prodis');
+    return queryInterface.dropTable('ruangs');
   }
 };

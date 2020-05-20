@@ -98,12 +98,12 @@ self.save = (req, res) => {
 // update data base on id
 self.update = (req, res) => {
     let id = req.params.prodiId;
-    let data = await prodi.update(req.body, {
+    prodi.update(req.body, {
       where:{
         id:id
       }
     }).then((data) => {
-      if(data){
+      if(data[0]){
         r_success(res, data);
       }else{
         r_error(res, e_get_id);
@@ -116,7 +116,7 @@ self.update = (req, res) => {
 // delete data base on id
 self.delete = (req, res)=>{
     let id = req.params.prodiId;
-    let data = await prodi.destroy({
+    prodi.destroy({
       where:{
         id:id
       }

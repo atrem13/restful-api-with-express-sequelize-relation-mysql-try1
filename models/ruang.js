@@ -2,6 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   const ruang = sequelize.define('ruang', {
     nama: {
+      allowNull:false,
       type:DataTypes.STRING,
       validate:{
         notNull:{
@@ -13,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     keterangan: {
+      allowNull:false,
       type:DataTypes.TEXT,
       validate:{
         notNull:{
@@ -24,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     kapasitas: {
+      allowNull:false,
       type:DataTypes.INTEGER,
       validate:{
         notNull:{
@@ -41,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
       type:DataTypes.INTEGER
     }
   }, {
-    tableName:'ruang'
+    tableName:'ruangs'
   });
   ruang.associate = function(models) {
     // associations can be defined here

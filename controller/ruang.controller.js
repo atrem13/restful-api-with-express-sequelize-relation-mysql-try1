@@ -1,22 +1,21 @@
 const {
-  mahasiswa,
+  ruang,
   Sequelize
 } = require('../models/index');
+
 const Op = Sequelize.Op;
 
-let self = {};
+let self = {}
 
-const r_success = require('./function/return_success.function');
+const r_succes = require('./function/return_success.function');
 const r_error = require('./function/return_error.function');
 const {e_get_id, e_get_all, e_search} = require('./variable/actiom.variable');
 
-// get all data
 self.getAll = (req, res) => {
-  mahasiswa.findAll({
-    include:['prodi']
-  }).then((data) => {
-    if(data){      
-      r_success(res, data);
+  ruang.findAll({})
+  .then((data) => {
+    if(data){
+      r_succes(res, data);
     }else{
       r_error(res, e_get_all);
     }
@@ -25,16 +24,12 @@ self.getAll = (req, res) => {
   });
 }
 
-// get data base on id
 self.get = (req, res) => {
-  mahasiswa.findOne({
-    include:['prodi'],
-    where:{
-      id:req.params.mahasiswaId
-    }
-  }).then((data) => {
+  let id = req.params.ruangId;
+  ruang.findByPk(id,{})
+  .then((data) => {
     if(data){
-      r_success(res, data);
+      r_succes(res, data);
     }else{
       r_error(res, e_get_id);
     }
@@ -43,53 +38,45 @@ self.get = (req, res) => {
   });
 }
 
-// search data base on name or prodis
 self.search = (req, res) => {
   let text = req.query.text;
-  mahasiswa.findAll({
-    include:['prodi'],
+  ruang.findAll({
     where:{
-      [Op.or]:{
-        nama:{
-          [Op.like]:`%${text}%`
-        },
-        '$prodi.nama$':{
-          [Op.like]:`%${text}%`
-        }
+      nama:{
+        [Op.like]:`%${text}%`
       }
     }
   }).then((data) => {
     if(data){
-      r_success(res, data);
+      r_succes(res, data);
     }else{
       r_error(res, e_search);
     }
   }).catch((err) => {
     r_error(res, err);
-  }); 
+  });
 }
 
-// create new data
 self.save = (req, res) => {
-  mahasiswa.create(req.body)
-    .then((data) => {
-      if(data){
-        r_success(res, data);
-      }
-    }).catch((err) => {
-      r_error(res, err);
-    });
+  ruang.create(req.body)
+  .then((data) => {
+    if(data){
+      r_succes(res, data)
+    }
+  }).catch((err) => {
+    r_error(res, err);
+  });
 }
 
-// update data base on id
 self.update = (req, res) => {
-  mahasiswa.update(req.body, {
+  let id = req.params.ruangId;
+  ruang.update(req.body, {
     where:{
-      id:req.params.mahasiswaId
+      id:id
     }
   }).then((data) => {
     if(data[0]){
-      r_success(res, data);
+      r_succes(res, data);
     }else{
       r_error(res, e_get_id);
     }
@@ -98,15 +85,15 @@ self.update = (req, res) => {
   });
 }
 
-// delete data base on id
 self.delete = (req, res) => {
-  mahasiswa.destroy({
+  let id = req.params.ruangId;
+  ruang.destroy({
     where:{
-      id:req.params.mahasiswaId
+      id:id
     }
   }).then((data) => {
     if(data){
-      r_success(res, data);
+      r_succes(res, data);
     }else{
       r_error(res, e_get_id);
     }
@@ -114,6 +101,5 @@ self.delete = (req, res) => {
     r_error(res, err);
   });
 }
-
 
 module.exports = self;
